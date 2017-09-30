@@ -6,6 +6,21 @@
 // distributed except according to those terms.
 
 //! Functions for obtaining and updating the platform-specfic last error code.
+//!
+//! This crate provides cross-platform functionality for obtaining and modifying the
+//! platform-specific last error code (e.g. `errno` on Unices). The `get_last_error` and
+//! `set_last_error` functions can be used to read and write the last error code, respectively.
+//!
+//! # Example
+//!
+//! ```rust
+//! extern crate os_error_code;
+//!
+//! fn main() {
+//!     os_error_code::set_last_error(1);
+//!     assert_eq!(os_error_code::get_last_error(), 1);
+//! }
+//! ```
 
 #![no_std]
 #![cfg_attr(feature = "clippy", feature(plugin))]

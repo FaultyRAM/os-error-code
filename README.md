@@ -5,7 +5,21 @@
 [![Crates.io](https://img.shields.io/crates/v/os-error-code.svg)][3]
 [![Docs.rs](https://docs.rs/os-error-code/badge.svg)][4]
 
-Functions for obtaining and updating the platform-specfic last error code.
+This crate provides cross-platform functionality for obtaining and modifying the platform-specific
+last error code (e.g. `errno` on Unices). Because it is `no_std`-friendly, it can be used in
+low-level code that directly interfaces with C, and as a building block for higher-level
+abstractions of platform-specific error handling.
+
+## Example
+
+```rust
+extern crate os_error_code;
+
+fn main() {
+    os_error_code::set_last_error(1);
+    assert_eq!(os_error_code::get_last_error(), 1);
+}
+```
 
 ## License
 
