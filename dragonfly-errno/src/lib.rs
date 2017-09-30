@@ -7,6 +7,7 @@
 
 //! Rust bindings to errno on DragonFlyBSD.
 
+#![no_std]
 #![cfg(target_os = "dragonfly")]
 #![cfg_attr(feature = "clippy", feature(plugin))]
 #![cfg_attr(feature = "clippy", plugin(clippy))]
@@ -29,7 +30,9 @@
 #![forbid(unused_results)]
 #![forbid(variant_size_differences)]
 
-use std::os::raw::c_int;
+extern crate libc;
+
+use libc::c_int;
 
 extern "C" {
     pub fn errno_location() -> *mut c_int;
