@@ -28,3 +28,15 @@
 #![forbid(unused_qualifications)]
 #![forbid(unused_results)]
 #![forbid(variant_size_differences)]
+
+#[inline]
+/// Returns the platform-specific last error code.
+pub fn get_last_error() -> i32 {
+    unimplemented!()
+}
+
+#[inline]
+/// Sets the platform-specific last error code to the given value.
+pub fn set_last_error(_code: i32) {
+    unimplemented!()
+}
