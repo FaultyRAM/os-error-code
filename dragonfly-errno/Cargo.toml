@@ -1,14 +1,13 @@
-[workspace]
-members = ["dragonfly-errno"]
-
 [package]
-name = "os-error-code"
+name = "dragonfly-errno"
 version = "0.1.0"
 authors = ["FaultyRAM <explodingpsu@gmail.com>"]
-description = "Functions for obtaining and updating the platform-specfic last error code."
+workspace = ".."
+publish = false
+description = "Rust bindings to errno on DragonFlyBSD."
 repository = "https://github.com/FaultyRAM/os-error-code"
 readme = "README.md"
-categories = ["api-bindings", "no-std", "os"]
+categories = ["api-bindings", "no-std", "os::unix-apis"]
 license = "Apache-2.0 OR MIT"
 
 [badges.appveyor]
@@ -30,13 +29,5 @@ status = "actively-developed"
 version = "0.0"
 optional = true
 
-[target.'cfg(unix)'.dependencies.libc]
-version = "0.2"
-
-[target.'cfg(target_os = "dragonfly")'.dependencies.dragonfly-errno]
-path = "dragonfly-errno"
-
-[target.'cfg(windows)'.dependencies.winapi]
-git = "https://github.com/retep998/winapi-rs.git"
-branch = "dev"
-features = ["errhandlingapi"]
+[target.'cfg(target_os = "dragonfly")'.build-dependencies]
+cc = "1"

@@ -5,14 +5,14 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be copied, modified, or
 // distributed except according to those terms.
 
-//! Functions for obtaining and updating the platform-specfic last error code.
+//! Rust bindings to errno on DragonFlyBSD.
 
-#![no_std]
+#![cfg(target_os = "dragonfly")]
 #![cfg_attr(feature = "clippy", feature(plugin))]
 #![cfg_attr(feature = "clippy", plugin(clippy))]
 #![cfg_attr(feature = "clippy", forbid(clippy))]
 #![cfg_attr(feature = "clippy", forbid(clippy_internal))]
-#![cfg_attr(feature = "clippy", deny(clippy_pedantic))]
+#![cfg_attr(feature = "clippy", forbid(clippy_pedantic))]
 #![cfg_attr(feature = "clippy", forbid(clippy_restrictions))]
 #![forbid(warnings)]
 #![forbid(anonymous_parameters)]
@@ -29,29 +29,8 @@
 #![forbid(unused_results)]
 #![forbid(variant_size_differences)]
 
-#[cfg(target_os = "dragonfly")]
-extern crate dragonfly_errno;
-#[cfg(all(unix, not(target_os = "dragonfly")))]
-extern crate libc;
-#[cfg(windows)]
-extern crate winapi;
+use std::os::raw::c_int;
 
-#[cfg(unix)]
-#[path = "unix.rs"]
-mod sys;
-
-#[cfg(windows)]
-#[path = "windows.rs"]
-mod sys;
-
-#[inline]
-/// Returns the platform-specific last error code.
-pub fn get_last_error() -> i32 {
-    sys::get_last_error()
-}
-
-#[inline]
-/// Sets the platform-specific last error code to the given value.
-pub fn set_last_error(code: i32) {
-    sys::set_last_error(code)
+extern "C" {
+    pub fn errno_location() -> *mut c_int;
 }

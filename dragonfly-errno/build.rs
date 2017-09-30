@@ -5,14 +5,13 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be copied, modified, or
 // distributed except according to those terms.
 
-//! Functions for obtaining and updating the platform-specfic last error code.
+//! dragonfly-errno build script.
 
-#![no_std]
 #![cfg_attr(feature = "clippy", feature(plugin))]
 #![cfg_attr(feature = "clippy", plugin(clippy))]
 #![cfg_attr(feature = "clippy", forbid(clippy))]
 #![cfg_attr(feature = "clippy", forbid(clippy_internal))]
-#![cfg_attr(feature = "clippy", deny(clippy_pedantic))]
+#![cfg_attr(feature = "clippy", forbid(clippy_pedantic))]
 #![cfg_attr(feature = "clippy", forbid(clippy_restrictions))]
 #![forbid(warnings)]
 #![forbid(anonymous_parameters)]
@@ -23,35 +22,20 @@
 #![forbid(missing_docs)]
 #![forbid(trivial_casts)]
 #![forbid(trivial_numeric_casts)]
+#![forbid(unsafe_code)]
 #![forbid(unused_extern_crates)]
 #![forbid(unused_import_braces)]
 #![forbid(unused_qualifications)]
 #![forbid(unused_results)]
 #![forbid(variant_size_differences)]
 
-#[cfg(target_os = "dragonfly")]
-extern crate dragonfly_errno;
-#[cfg(all(unix, not(target_os = "dragonfly")))]
-extern crate libc;
-#[cfg(windows)]
-extern crate winapi;
+extern crate cc;
 
-#[cfg(unix)]
-#[path = "unix.rs"]
-mod sys;
+use cc::Build;
 
-#[cfg(windows)]
-#[path = "windows.rs"]
-mod sys;
-
-#[inline]
-/// Returns the platform-specific last error code.
-pub fn get_last_error() -> i32 {
-    sys::get_last_error()
-}
-
-#[inline]
-/// Sets the platform-specific last error code to the given value.
-pub fn set_last_error(code: i32) {
-    sys::set_last_error(code)
+fn main() {
+    let _ = Build::new()
+        .file("src/shim.c")
+        .warnings_into_errors(true)
+        .compile("dragonfly-errno-shim");
 }
