@@ -32,6 +32,6 @@ pub fn get_last_error() -> i32 {
 /// Unix-specific `set_last_error` implementation.
 pub fn set_last_error(code: i32) {
     unsafe {
-        *errno_location = code;
+        *errno_location() = code;
     }
 }
