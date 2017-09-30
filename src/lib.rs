@@ -12,7 +12,7 @@
 #![cfg_attr(feature = "clippy", plugin(clippy))]
 #![cfg_attr(feature = "clippy", forbid(clippy))]
 #![cfg_attr(feature = "clippy", forbid(clippy_internal))]
-#![cfg_attr(feature = "clippy", forbid(clippy_pedantic))]
+#![cfg_attr(feature = "clippy", deny(clippy_pedantic))]
 #![cfg_attr(feature = "clippy", forbid(clippy_restrictions))]
 #![forbid(warnings)]
 #![forbid(anonymous_parameters)]
@@ -29,14 +29,21 @@
 #![forbid(unused_results)]
 #![forbid(variant_size_differences)]
 
+#[cfg(windows)]
+extern crate winapi;
+
+#[cfg(windows)]
+#[path = "windows.rs"]
+mod sys;
+
 #[inline]
 /// Returns the platform-specific last error code.
 pub fn get_last_error() -> i32 {
-    unimplemented!()
+    sys::get_last_error()
 }
 
 #[inline]
 /// Sets the platform-specific last error code to the given value.
-pub fn set_last_error(_code: i32) {
-    unimplemented!()
+pub fn set_last_error(code: i32) {
+    sys::set_last_error(code)
 }
